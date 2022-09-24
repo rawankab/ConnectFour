@@ -2,10 +2,6 @@
 #include <stdbool.h>
 #include <setjmp.h>
 
-
-//jmp_buf savebuf;
-//void init();
-
 void init();
 void printBoard();
 char getCode();
@@ -33,21 +29,10 @@ typedef enum Color {Empty = 0, Red = 1 , Yellow = 2} Color;
     const int columns = 7;
     char board[6][7];
     
-    //int directions[][] { {-1, 1}, {0, 1}, {1, 1}, {1, 0} };
-    //List<int[]> possibleDirections[][];
-     
-/*void init(){
- board = new Color[rows][columns];  
-  possibleDirections = new List[rows][columns];
-  for(int r = 0; r < rows; r++){
-    for(int c = 0; c< columns; c++){
-        board[r][c] = Color.Empty;
-    }
-  }
-}*/
+
 void init(){
-    for (int i = 0; i < 6; i++){
-        for(int j =0; j < 7; j++){
+    for (int i = 0; i < rows; i++){
+        for(int j =1; j <= columns; j++){
             board[i][j] = '0';
             printf("| %c ", board[i][j]);
         }
@@ -56,13 +41,13 @@ void init(){
 }
 
 void printBoard(){
-    //char spaces[] = "----|---|---|---|---|---|---|";
+    
     for(int i = 0; i < rows; i++){
-        for(int j = 0; j < columns; j++){
+        for(int j = 1; j <= columns; j++){
             printf("| %c ", board[i][j]);
         }
         printf("|\n");    
-        //printf("%s\n", spaces);    
+           
     }
     
     printf("  1   2   3   4   5   6   7 \n");
@@ -84,16 +69,15 @@ void playerMove(){
             player = Yellow;
         }
         while(true){
-        // get input
+        // get the column number from user 
             printf("player %c enter column #(1-7): \n", getCode(player));
             scanf("%d", &numberChosen);
-            --numberChosen; //index -1
-            // need to add a try and catch
 
         if(insert(player, numberChosen)){
             break;
         }
-        printf("input another #(1-7)\n");
+        printf("input another valid #(1-7)\n");
+        turn--;
 
         }
         printBoard();
@@ -102,9 +86,10 @@ void playerMove(){
 
     }
 }
+
     
 bool insert(Color name, int col){
-    if(col < 0 || col > columns){ // out of bound
+    if(col <= 0 || col > columns){ // out of bound
         return false;
     }
 
@@ -115,16 +100,14 @@ bool insert(Color name, int col){
             break;
         }
     }
-    if(r == rows){
+     if(r == -1){// color present at the top of the column 
+    printf("column is full :(  \n");
         return false;
     }
-    else if( r == -1){
-        r++;
-    }
+
     board[r][col] = getCode(name);
     return true;
 }
-
 int main(){
 
     char winner = ' ';
