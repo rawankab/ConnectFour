@@ -5,15 +5,24 @@
 #include<stdio.h>
 #include <stdbool.h>
 #include <setjmp.h>
+#include <time.h>
 
 void init();
 void printBoard();
 char getCode();
 void playerMove();
 bool insert();
+void playername();
+void flipcoin();
+void askplayername();
+char player1[10];
+char player2[10];
+typedef enum coin {HEADS, TAILS} coin; //here we're making a synonym "coin" for enum coin
 
 
 typedef enum Color {Empty = 0, Red = 1 , Yellow = 2} Color;
+Color player1Color;
+Color player2Color;
  
 
 
@@ -113,6 +122,33 @@ bool insert(Color name, int col){
     board[r][col] = getCode(name);
     return true;
 }
+
+void askplayername() {
+
+    printf("Welcome to Connect Four! \n");
+
+    printf("Player 1, Enter your name: ");
+    fgets(player1, 10, stdin);
+
+    printf("Player 2, Enter your name: ");
+    fgets(player2, 10, stdin);
+}
+
+void flipCoin(char* player1, char* player2) {
+    srand(time(0));
+    if (rand() % 2 != 0) {
+        player1Color = 1;
+        player2Color = 2;
+        printf("HEADS ! %s", player1, "goes first, You are RED");
+    } 
+    else {
+        player1Color = 2;
+        player2Color = 1;
+        printf("TAILS ! %s", player2, "goes first, You are RED");
+    }
+}
+
+
 int main(){
 
     char winner = ' ';
