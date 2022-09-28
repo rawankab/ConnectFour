@@ -72,18 +72,28 @@ void playerMove(){
     bool isRunning = true;
     int numberChosen;
     Color player;
+    char* playerUsername;
     // determine current color based on odd/even
     while(turn < rows * columns && isRunning){
-        int playerTurn  =( (turn % 2) == 0 )? 2 : 1;
-        if(playerTurn == 1){
-            player = Red;
-        }
-        else{
-            player = Yellow;
+        int playerTurn  =( (turn % 2) == 0 )? (player = Red) : (player = Yellow);
+        if (player == Red) {
+            if (player1Color == Red) {
+                playerUsername = player1;
+            } else {
+                playerUsername = player2;
+            }
+        }  
+
+        else if (player == Yellow) {
+            if (player1Color == Yellow) {
+                playerUsername = player1;
+            } else {
+                playerUsername = player2;
+            }
         }
         while(true){
         // get the column number from user 
-            printf("player %c enter column #(1-7): \n", getCode(player));
+            printf("player %c",player,  "enter column #(1-7): \n", getCode(player));
             scanf("%d", &numberChosen);
 
         if(insert(player, numberChosen)){
@@ -148,8 +158,9 @@ void flipCoin(char* player1, char* player2) {
     }
 }
 
-
 int main(){
+    askplayername();
+    flipcoin();
 
     char winner = ' ';
     printBoard();
