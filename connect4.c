@@ -1,5 +1,6 @@
 //Connect 4 - CMPS 270
 //alice
+//ryan
 
 #include<stdio.h>
 #include <stdbool.h>
