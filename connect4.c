@@ -78,15 +78,16 @@ void playerMove(){
             scanf("%d", &numberChosen);
 
         if(insert(player, numberChosen)){
+            turn++;
             break;
+        
         }
         printf("input another valid #(1-7)\n");
-        turn--;
+        
 
         }
         printBoard();
-
-        turn++;
+        printf("%d", turn);
 
     }
 }
