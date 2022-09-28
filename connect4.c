@@ -100,7 +100,7 @@ bool insert(Color name, int col){
     int r;
     for( r = rows -1; r >= 0; r--){
         if(board[r][col] == Empty){
-            board[r][col] == getCode(name);
+            board[r][col] = getCode(name);
             break;
         }
     }
