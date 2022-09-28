@@ -1,5 +1,5 @@
 //Connect 4 - CMPS 270
-//alice
+//alice jojo
 //ryan
 
 #include<stdio.h>
