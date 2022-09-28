@@ -12,7 +12,6 @@ void printBoard();
 char getCode();
 void playerMove();
 bool insert();
-<<<<<<< Updated upstream
 void playername();
 void flipcoin();
 void askplayername();
@@ -25,15 +24,6 @@ typedef enum Color {Empty = 0, Red = 1 , Yellow = 2} Color;
 Color player1Color;
 Color player2Color;
  
-=======
-char player[10];
-char player[10];
-
-
-typedef enum Color {Empty = 0, Red = 1 , Yellow = 2} Color;
-typedef enum coin {HEADS, TAILS} coin;
-void flipCoin();
->>>>>>> Stashed changes
 
 
  char getCode(Color convert){
@@ -134,22 +124,15 @@ bool insert(Color name, int col){
 }
 
 void askplayername() {
-<<<<<<< Updated upstream
 
     printf("Welcome to Connect Four! \n");
 
     printf("Player 1, Enter your name: ");
-=======
-    printf("Welcome to Connect Four ! \n");
-
-    printf("Player1, Enter your name: ");
->>>>>>> Stashed changes
     fgets(player1, 10, stdin);
 
     printf("Player 2, Enter your name: ");
     fgets(player2, 10, stdin);
 }
-<<<<<<< Updated upstream
 
 void flipCoin(char* player1, char* player2) {
     srand(time(0));
@@ -166,8 +149,6 @@ void flipCoin(char* player1, char* player2) {
 }
 
 
-=======
->>>>>>> Stashed changes
 int main(){
 
     char winner = ' ';
