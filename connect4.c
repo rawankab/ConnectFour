@@ -20,6 +20,10 @@ void askplayername();
 char player1[10];
 char player2[10];
 
+const int rows = 6;
+const int columns = 7;
+char board[6][7];
+
 typedef enum coin {HEADS, TAILS} coin; //here we're making a synonym "coin" for enum coin
 
 
@@ -41,32 +45,30 @@ Color player2Color;
         }
     }
    
-    const int rows = 6;
-    const int columns = 7;
-    char board[6][7];
     
 
 void init(){
+    printf("----------------------------- \n");
     for (int i = 0; i < rows; i++){
         for(int j =1; j <= columns; j++){
             board[i][j] = '0';
             printf("| %c ", board[i][j]);
         }
-        printf("\n");
+        printf("|\n");
     }
+    printf("----------------------------- \n");
 }
 
-void printBoard(){
-    
+
+void gameBoard(){
+    printf("-----------------------------  \n");
     for(int i = 0; i < rows; i++){
         for(int j = 1; j <= columns; j++){
             printf("| %c ", board[i][j]);
-        }
-        printf("|\n");    
-           
+        }  
+        printf("|\n");
     }
-    
-    printf("  1   2   3   4   5   6   7 \n");
+    printf("-----------------------------  \n");
 
 }
 void askplayername() {
@@ -132,7 +134,7 @@ void playerMove(){
         
 
         }
-        printBoard();
+        gameBoard();
 
     }
 }
@@ -145,7 +147,7 @@ bool insert(Color name, int col){
 
     int r;
     for( r = rows -1; r >= 0; r--){
-        if(board[r][col] == Empty){
+        if(board[r][col] == '0'){
             board[r][col] = getCode(name);
             break;
         }
@@ -163,7 +165,7 @@ bool insert(Color name, int col){
 int main(){
     askplayername();
     flipCoin();
-    printBoard();
+    init();
     playerMove();
 
 
