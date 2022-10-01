@@ -16,8 +16,10 @@ bool insert();
 void playername();
 void flipCoin();
 void askplayername();
+
 char player1[10];
 char player2[10];
+
 typedef enum coin {HEADS, TAILS} coin; //here we're making a synonym "coin" for enum coin
 
 
@@ -67,9 +69,33 @@ void printBoard(){
     printf("  1   2   3   4   5   6   7 \n");
 
 }
+void askplayername() {
+
+    printf("Welcome to Connect Four! \n");
+
+    printf("Player 1, Enter your name: ");
+    scanf_s("%s", &player1);
+
+    printf("Player 2, Enter your name: ");
+    scanf_s("%s", &player2);
+}
+
+void flipCoin() {
+    srand(time(0));
+    if (rand() % 2 != 0) {
+        player1Color = 1;
+        player2Color = 2;
+        printf("HEADS ! %s goes first, You are RED \n", player1);
+    } 
+    else {
+        player1Color = 2;
+        player2Color = 1;
+        printf("TAILS ! %s goes first, You are RED \n", player2);
+    }
+}
 
 void playerMove(){
-    int turn = 1;
+    int turn = 0;
     bool isRunning = true;
     int numberChosen;
     Color player;
@@ -94,7 +120,7 @@ void playerMove(){
         }
         while(true){
         // get the column number from user 
-            printf("player %c",player,  "enter column #(1-7): \n", getCode(player));
+            printf("%s enter column #(1-7): \n", playerUsername);
             scanf("%d", &numberChosen);
 
         if(insert(player, numberChosen)){
@@ -107,7 +133,6 @@ void playerMove(){
 
         }
         printBoard();
-        printf("%d", turn);
 
     }
 }
@@ -134,36 +159,10 @@ bool insert(Color name, int col){
     return true;
 }
 
-void askplayername() {
-
-    printf("Welcome to Connect Four! \n");
-
-    printf("Player 1, Enter your name: ");
-    fgets(player1, 10, stdin);
-
-    printf("Player 2, Enter your name: ");
-    fgets(player2, 10, stdin);
-}
-
-void flipCoin() {
-    srand(time(0));
-    if (rand() % 2 != 0) {
-        player1Color = 1;
-        player2Color = 2;
-        printf("HEADS ! %s", player1, "goes first, You are RED");
-    } 
-    else {
-        player1Color = 2;
-        player2Color = 1;
-        printf("TAILS ! %s", player2, "goes first, You are RED");
-    }
-}
 
 int main(){
     askplayername();
     flipCoin();
-
-    char winner = ' ';
     printBoard();
     playerMove();
 
