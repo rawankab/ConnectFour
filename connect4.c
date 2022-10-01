@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <setjmp.h>
 #include <time.h>
+#include <stdlib.h>
 
 void init();
 void printBoard();
@@ -13,7 +14,7 @@ char getCode();
 void playerMove();
 bool insert();
 void playername();
-void flipcoin();
+void flipCoin();
 void askplayername();
 char player1[10];
 char player2[10];
@@ -144,7 +145,7 @@ void askplayername() {
     fgets(player2, 10, stdin);
 }
 
-void flipCoin(char* player1, char* player2) {
+void flipCoin() {
     srand(time(0));
     if (rand() % 2 != 0) {
         player1Color = 1;
@@ -160,7 +161,7 @@ void flipCoin(char* player1, char* player2) {
 
 int main(){
     askplayername();
-    flipcoin();
+    flipCoin();
 
     char winner = ' ';
     printBoard();
