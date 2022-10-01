@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 void init();
-void printBoard();
+void gameBoard();
 char getCode();
 void playerMove();
 bool insert();
