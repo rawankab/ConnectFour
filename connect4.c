@@ -24,12 +24,12 @@ const int rows = 6;
 const int columns = 7;
 char board[6][7];
 
-typedef enum coin {HEADS, TAILS} coin; //here we're making a synonym "coin" for enum coin
-
 
 typedef enum Color {Empty = 0, Red = 1 , Yellow = 2} Color;
-Color player1Color;
+Color player1Color; 
 Color player2Color;
+// Since we are going to keep track of the color of the players, we decided to create 2 variables called "player1Color"
+// 
  
 
 
@@ -76,12 +76,16 @@ void askplayername() {
     printf("Welcome to Connect Four! \n");
 
     printf("Player 1, Enter your name: ");
+    int playername;
+    while (playername != )
     scanf_s("%s", &player1);
 
     printf("Player 2, Enter your name: ");
     scanf_s("%s", &player2);
 }
-
+// Specifications : We decide to use the random fucntion to decide which one of the players will play Red. Since Rand returns a random integer
+// It's either going to give us a modulus of 1 or 0, which guarantees the 50/50 percent chance . If the modulus returns 1 (meaning HEADS)
+// the first player will be given the color RED, and the second player will be YELLOW. In Contrary the Opposite will happen if it's TAILS
 void flipCoin() {
     srand(time(0));
     if (rand() % 2 != 0) {
@@ -100,29 +104,30 @@ void playerMove(){
     int turn = 0;
     bool isRunning = true;
     int numberChosen;
-    Color player;
-    char* playerUsername;
+    Color player; // This variable keeps track of the color of THE CURRENT PLAYER
+    char* playerUsername; // Display the username of the current player
     // determine current color based on odd/even
     while(turn < rows * columns && isRunning){
         int playerTurn  =( (turn % 2) == 0 )? (player = Red) : (player = Yellow);
-        if (player == Red) {
+        if (player == Red) { //This first condition represents the following: If the current player should be Red and player1 is assigned the color red, then his name will be displayed
             if (player1Color == Red) {
                 playerUsername = player1;
-            } else {
+            } else { // This automatically means that the second player is assigned RED, so his/her name will be Displayed
                 playerUsername = player2;
             }
         }  
 
-        else if (player == Yellow) {
+        else if (player == Yellow) { // This second Condition represents the following : If the current player should be YELLOW and the first Player is assigned YELLOW
+        // then his/her name will be displayed
             if (player1Color == Yellow) {
                 playerUsername = player1;
-            } else {
+            } else { // This automatically means that the second player is assigned YELLOW so his/her name will be displayed
                 playerUsername = player2;
             }
         }
         while(true){
         // get the column number from user 
-            printf("%s enter column #(1-7): \n", playerUsername);
+            printf("%s enter column #(1-7): \n", playerUsername); // will display the username of the player 
             scanf("%d", &numberChosen);
 
         if(insert(player, numberChosen)){
