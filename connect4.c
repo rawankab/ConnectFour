@@ -166,6 +166,24 @@ bool insert(Color name, int col){
     return true;
 }
 
+bool checkWin(int r, int c, Color color_inserted) {
+    int i = c - 3;
+    while(i < 0)
+        i++;
+    int j = c + 3;
+    while(j > 6)
+        j--;
+    int counter = 0;
+    for(int k = i; k <= j; k++) {
+        if(counter == 4)
+            return true;
+        if(board[r][k] == getCode(color_inserted))
+            counter++;
+        else
+            counter = 0;
+    }
+    return false;
+}
 
 int main(){
     askplayername();
