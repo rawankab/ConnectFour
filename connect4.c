@@ -16,6 +16,7 @@ bool insert();
 void playername();
 void flipCoin();
 void askplayername();
+bool checkWin();
 
 char player1[10];
 char player2[10];
@@ -132,8 +133,17 @@ void playerMove(){
 
         if(insert(player, numberChosen)){
             turn++;
+            int r = rows - 1;
+            while(board[r][numberChosen] != getCode(Empty)) {
+               r--;
+            }
+            r++;
+            if(checkWin(r, numberChosen, player)) {
+               printf("player %d won!\n", getCode(player));
+                isRunning = false;
+                gameBoard();
+            }
             break;
-        
         }
         printf("input another valid #(1-7)\n");
         
