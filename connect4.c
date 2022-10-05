@@ -141,7 +141,6 @@ void playerMove(){
             if(checkWin(r, numberChosen, player)) {
                printf("player %d won!\n", getCode(player));
                 isRunning = false;
-                gameBoard();
             }
             break;
         }
