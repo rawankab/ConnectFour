@@ -85,8 +85,6 @@ void askPlayerName() {
     printf("Welcome to Connect Four! \n");
 
     printf("Player 1, Enter your name: ");
-    int playername;
-    while (playername != )
     scanf_s("%s", &player1);
 
     printf("Player 2, Enter your name: ");
@@ -123,7 +121,7 @@ void playerMove(){
     char* playerUsername;          // Display the username of the current player
     while(turn < rows * columns && isRunning){
         int playerTurn  =( (turn % 2) == 0 )? (player = Red) : (player = Yellow);
-        
+
         if (player == Red) {                     //This first condition represents the following: If the current player should be Red and player1 is assigned the color red, then his name will be displayed
             if (player1Color == Red) {
                 playerUsername = player1;
@@ -152,7 +150,7 @@ void playerMove(){
             }
             r++;
             if(checkWin(r, numberChosen, player)) {
-               printf("player %d won!\n", getChar(player));
+               printf("player %s won!\n", getChar(player));
                 isRunning = false;
             }
             break;
