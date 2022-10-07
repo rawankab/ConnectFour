@@ -160,8 +160,8 @@ void playerMove(){
 }
 
 // insert() requires as parameters the enum Color corresponding to the current player and the chossen column 
-// in which he would like to insert his 'coin'. insert() returns a boolean : false if the insertion failed and
-// true if the insertion was succeseful. It throws an exception if the column chosen is not the range
+// in which he would like to insert his 'coin'. insert() returns an int : -1 if the insertion failed and
+// the row in which the coin is inserted if the insertion was succeseful. It throws an exception if the column chosen is not the range
 // 1 to 7 or full.
 
 int insert(Color currentPlayer, int col){
@@ -184,24 +184,48 @@ int insert(Color currentPlayer, int col){
     board[r][col] = getChar(currentPlayer);
     return r;
 }
-
+//checkWin() requires as parameters: row and column indexes where the last insertion occurred and the color of the coin inserted
+//checkWin() returns true if last insertion resulted in a win for the player and false otherwise(there are 3 cases for checking:
+//horizontally, vertically, and diagonally, thus 3 counters)
 bool checkWin(int r, int c, Color color_inserted) {
+    //first case: checking horizontally
     int i = c - 3;
     while(i < 0)
         i++;
     int j = c + 3;
     while(j > 6)
         j--;
-    int counter = 0;
+    int counter1 = 0;
     
     for(int k = i; k <= j+1; k++) {
-        if(counter == 4)
+        if(counter1 == 4)
             return true;
         if(board[r][k+1] == getChar(color_inserted))
-            ++counter;
+            ++counter1;
         else if(board[r][k+1] != getChar(color_inserted))
-            counter = 0;
+            counter1 = 0;  //reset counter; start counting agains
     }
+
+    //second case: checking vertically
+    //similar concept, except now i and j are representing change in row and not column
+    i = r - 3;
+    while (i < 0)
+        i++;
+    j = r + 3;
+    while (j > 5)
+        j--;
+    int counter2 = 0;
+    for(int k = i; k <= j+1; k++) {
+        if(counter2 == 4)
+            return true;
+        if(board[k][c+1] == getChar(color_inserted))
+            ++counter2;
+        else if(board[k][c+1] != getChar(color_inserted))
+            counter2 = 0;
+    }
+
+    //third case: checking diagonally
+
     return false;
 }
 
@@ -210,10 +234,6 @@ int main(){
     flipCoin();
     init();
     playerMove();
-
-
-
     return 0;
-
 }
 
