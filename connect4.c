@@ -85,10 +85,10 @@ void askPlayerName() {
     printf("Welcome to Connect Four! \n");
 
     printf("Player 1, Enter your name: ");
-    scanf_s("%s", &player1);
+    scanf("%s", &player1);
 
     printf("Player 2, Enter your name: ");
-    scanf_s("%s", &player2);
+    scanf("%s", &player2);
 }
 // flipCoin() does not require any parameters. It assigns randomly which one of the players will play Red. 
 // Since Rand returns a random integer it's either going to give us a modulus of 1 or 0, which guarantees 
@@ -150,7 +150,7 @@ void playerMove(){
             }
             r++;
             if(checkWin(r, numberChosen, player)) {
-               printf("player %s won!\n", getChar(player));
+               printf("%s won!\n", playerUsername);
                 isRunning = false;
             }
             break;
