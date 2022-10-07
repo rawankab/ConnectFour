@@ -11,7 +11,7 @@ void init();
 void gameBoard();
 char getChar();
 void playerMove();
-bool insert();
+int insert();
 void playername();
 void flipCoin();
 void askPlayerName();
@@ -141,23 +141,18 @@ void playerMove(){
         while(true){ 
             printf("%s enter column #(1-7): \n", playerUsername);  
             scanf("%d", &numberChosen);
-
-        if(insert(player, numberChosen)){
+            int insertion = insert(player, numberChosen);
+            
+        if(insertion != -1){
             turn++;
-            int r = rows - 1;
-            while(board[r][numberChosen] != getChar(Empty)) {
-               r--;
-            }
-            r++;
-            if(checkWin(r, numberChosen, player)) {
+            int r = insertion;
+            if(checkWin(r, numberChosen-1, player)) {
                printf("%s won!\n", playerUsername);
                 isRunning = false;
             }
             break;
         }
         printf("input another valid #(1-7)\n");
-        
-
         }
         gameBoard();
 
@@ -169,9 +164,9 @@ void playerMove(){
 // true if the insertion was succeseful. It throws an exception if the column chosen is not the range
 // 1 to 7 or full.
 
-bool insert(Color currentPlayer, int col){
+int insert(Color currentPlayer, int col){
     if(col <= 0 || col > columns){ 
-        return false;
+        return -1;
     }
 
     int r;
@@ -183,11 +178,11 @@ bool insert(Color currentPlayer, int col){
     }
      if(r == -1){
     printf("column is full :(  \n");
-        return false;
+        return -1;
     }
 
     board[r][col] = getChar(currentPlayer);
-    return true;
+    return r;
 }
 
 bool checkWin(int r, int c, Color color_inserted) {
@@ -198,12 +193,13 @@ bool checkWin(int r, int c, Color color_inserted) {
     while(j > 6)
         j--;
     int counter = 0;
-    for(int k = i; k <= j; k++) {
+    
+    for(int k = i; k <= j+1; k++) {
         if(counter == 4)
             return true;
-        if(board[r][k] == getChar(color_inserted))
-            counter++;
-        else
+        if(board[r][k+1] == getChar(color_inserted))
+            ++counter;
+        else if(board[r][k+1] != getChar(color_inserted))
             counter = 0;
     }
     return false;
