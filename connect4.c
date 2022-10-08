@@ -186,7 +186,7 @@ int insert(Color currentPlayer, int col){
 }
 //checkWin() requires as parameters: row and column indexes where the last insertion occurred and the color of the coin inserted
 //checkWin() returns true if last insertion resulted in a win for the player and false otherwise(there are 3 cases for checking:
-//horizontally, vertically, and diagonally, thus 3 counters)
+//horizontally, vertically, and diagonally(left to right and right to left), thus 4 counters)
 bool checkWin(int r, int c, Color color_inserted) {
     //first case: checking horizontally
     int i = c - 3;
@@ -198,8 +198,10 @@ bool checkWin(int r, int c, Color color_inserted) {
     int counter1 = 0;
     
     for(int k = i; k <= j+1; k++) {
-        if(counter1 == 4)
+        if(counter1 == 4) {
+            printf("horizontally\n");
             return true;
+        }
         if(board[r][k+1] == getChar(color_inserted))
             ++counter1;
         else if(board[r][k+1] != getChar(color_inserted))
@@ -216,15 +218,72 @@ bool checkWin(int r, int c, Color color_inserted) {
         j--;
     int counter2 = 0;
     for(int k = i; k <= j+1; k++) {
-        if(counter2 == 4)
+        if(counter2 == 4) {
+            printf("vertically\n");
             return true;
+        }
         if(board[k][c+1] == getChar(color_inserted))
             ++counter2;
         else if(board[k][c+1] != getChar(color_inserted))
             counter2 = 0;
     }
 
-    //third case: checking diagonally
+    //third case: checking diagonally-left to right
+    int i1 = r + 3; int i2 = c - 3; //start checking from these initial coordinates
+    while(i1 > 5)
+        i1--;
+    while(i2 < 0)
+        i2++;
+
+    int j1 = r - 3; int j2 = c + 3; //checking ends at these coordinates
+    while(j1 < 0)
+        j1++;
+    while(j2 > 6)
+        j2--;
+    
+    int k1 = i1; int k2 = i2;
+    int counter3 = 0;
+    while(k1 >= j1 - 1 && k2 <= j2 + 1) {
+        if(counter3 == 4) {
+            printf("diagonally, left to right\n");
+            return true;
+        }
+        if (board[k1][k2+1] == getChar(color_inserted))
+            ++counter3;
+        else if(board[k1][k2+1] != getChar(color_inserted))
+            counter3 = 0;
+        k1--;
+        k2++;
+    }
+
+    //fourth case: checking diagonally-right to left
+    //Similar concept, except coordinates of where we start and where we finish change a bit
+    i1 = r + 3; i2 = c + 3;
+    while(i1 > 5)
+        i1--;
+    while(i2 > 6)
+        i2--;
+    
+    j1 = r - 3; j2 = c - 3;
+    while(j1 < 0)
+        j1++;
+    while(j2 < 0)
+        j2++;
+    
+    k1 = i1; k2 = i2;
+    int counter4 = 0;
+    while(k1 >= j1 - 1 && k2 >= j2 - 1) {
+        if(counter4 == 4) {
+            printf("diagonally, right to left\n");
+            return true;
+        }
+        if(board[k1][k2+1] == getChar(color_inserted))
+            ++counter4;
+        else if(board[k1][k2+1] != getChar(color_inserted))
+            counter4 = 0;
+        k1--;
+        k2--;
+    }
 
     return false;
 }
