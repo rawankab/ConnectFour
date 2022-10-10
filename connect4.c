@@ -6,6 +6,7 @@
 #include <setjmp.h>
 #include <time.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 void init();
 void gameBoard();
@@ -17,9 +18,16 @@ void flipCoin();
 void askPlayerName();
 bool checkWin();
 
+//time 
+time_t start,end;
+int time1 = 0;
+int time2 = 0;
+
+//player name
 char player1[10];
 char player2[10];
 
+//board specs
 const int rows = 6;
 const int columns = 7;
 char board[6][7];
@@ -27,11 +35,22 @@ char board[6][7];
 // enum Color gives the 3 possible numerical representations of the colors that are going to be used
 // in our 2D array. Since we are going to keep track of the color of the players, 
 // we decided to create 2 variables called "player1Color" and "player2Color". 
-
 typedef enum Color {Empty = 0, Red = 1 , Yellow = 2} Color;
 Color player1Color; 
 Color player2Color;
 
+
+// checkBoartFull() checks if the board is full or not by checking if there is an empty space in the
+// 1st column of the board. If there is an empty space, then the board is not full. If there is no empty
+// space, then the board is full.
+bool checkBoardFull(){
+    for (int i = 0; i <=columns; i++){
+        if (board[0][i] == '0'){
+            return false;
+        }
+    }
+    return true;
+}
 
 // getCode() reuires as parameter the enum Color of each player and returns its corresponding char.
 
@@ -50,8 +69,6 @@ Color player2Color;
     
 // init() does not require any parameters. It initializes the game Board having
 // seven columns and six rows to empty cells.
-
-
 void init(){
     printf("----------------------------- \n");
     for (int i = 0; i < rows; i++){
@@ -66,7 +83,6 @@ void init(){
 
 // gameBoard() does not require any parameters. It prints out the updated game board at each 
 // move the players undertake. 
-
 void gameBoard(){
     printf("-----------------------------  \n");
     for(int i = 0; i < rows; i++){
@@ -78,8 +94,8 @@ void gameBoard(){
     printf("-----------------------------  \n");
 
 }
-// askPlayerName() does not requires any parameters. It welcomes the players and asks for their names. 
 
+// askPlayerName() does not requires any parameters. It welcomes the players and asks for their names. 
 void askPlayerName() {
 
     printf("Welcome to Connect Four! \n");
@@ -90,11 +106,11 @@ void askPlayerName() {
     printf("Player 2, Enter your name: ");
     scanf("%s", &player2);
 }
+
 // flipCoin() does not require any parameters. It assigns randomly which one of the players will play Red. 
 // Since Rand returns a random integer it's either going to give us a modulus of 1 or 0, which guarantees 
 // the 50/50 percent chance. If the modulus returns 1 (meaning HEADS) the first player will be given the
 // color RED, and the second player will be YELLOW. In Contrary the Opposite will happen if it's TAILS.
-
 void flipCoin() {
     srand(time(0));
     if (rand() % 2 != 0) {
@@ -108,11 +124,11 @@ void flipCoin() {
         printf("TAILS ! %s goes first, You are RED \n", player2);
     }
 }
+
 // playerMove() does not requires any parameters and stops when the number of turns exceeds 42 (after that the 
 //board will be full) or when one of the players wins. The main function of the playerMove() 
 // is to determine the current color based on odd/even of the turn. In addition, while the game is still 
 // running playerMove() gets the column number from the user and inserts the 'coin' in the board while printing it.  
-
 void playerMove(){
     int turn = 0;
     bool isRunning = true;
@@ -137,24 +153,56 @@ void playerMove(){
                 playerUsername = player2;
             }
         }
+        start = 0;      // Resets the start time to 0
+        end = 0;        // Resets the end time to 0
+        
+
+        time(&start);                              // This is the start of the timer
 
         while(true){ 
+
             printf("%s enter column #(1-7): \n", playerUsername);  
             scanf("%d", &numberChosen);
             int insertion = insert(player, numberChosen);
+
             
-        if(insertion != -1){
-            turn++;
-            int r = insertion;
-            if(checkWin(r, numberChosen-1, player)) {
-               printf("%s won!\n", playerUsername);
-                isRunning = false;
-            }
-            break;
+
+            if(insertion != -1){
+                time(&end);                         // This is the end of the timer
+                if (player == Red && player1Color == Red || player == Yellow && player1Color == Yellow) {       
+                    time1 += (int) difftime(end,start);     // This is the time of the first player
+                } else {
+                    time2 += (int) difftime(end,start);     // This is the time of the second player
+                }
+                turn++;
+                int r = insertion;
+                if(checkWin(r, numberChosen-1, player)) {
+                    printf("%s won!\n", playerUsername);
+                    isRunning = false;
+                }
+                break;
         }
-        printf("input another valid #(1-7)\n");
+            printf("input another valid #(1-7)\n");
         }
+
         gameBoard();
+
+        // Checks if the board is full. If it is, then the game will check who took less time to 
+        // complete the game and will declare him/her the winner.
+        // In order to check if it works, input the following sequence
+        // 1 2 1 2 2 1 1 2 2 1 2 1 3 4 3 3 3 3 4 4 4 3 5 4 4 6 5 5 5 5 7 5 7 6 6 7 7 6 6 7 6 7 <-- this causes a tie
+        if (checkBoardFull()) {
+             printf("The board is full! the winner will be chosen based on speed: \n");
+             if (time1 < time2) {
+                 printf("%s wins with t1 = %ds and t2 = %ds\n", player1, time1, time2);
+            } else if (time2 < time1) {
+                 printf("%s wins with t2 = %ds and t1 = %ds\n", player2, time2, time1);
+            } else {
+                 printf("It's a tie! (t1 = %ds) (t2 = %ds) \n", time1, time2);
+            }
+            isRunning = false;
+             break;
+        }
 
     }
 }
@@ -163,7 +211,6 @@ void playerMove(){
 // in which he would like to insert his 'coin'. insert() returns an int : -1 if the insertion failed and
 // the row in which the coin is inserted if the insertion was succeseful. It throws an exception if the column chosen is not the range
 // 1 to 7 or full.
-
 int insert(Color currentPlayer, int col){
     if(col <= 0 || col > columns){ 
         return -1;
@@ -184,6 +231,7 @@ int insert(Color currentPlayer, int col){
     board[r][col] = getChar(currentPlayer);
     return r;
 }
+
 //checkWin() requires as parameters: row and column indexes where the last insertion occurred and the color of the coin inserted
 //checkWin() returns true if last insertion resulted in a win for the player and false otherwise(there are 3 cases for checking:
 //horizontally, vertically, and diagonally(left to right and right to left), thus 4 counters)
@@ -284,6 +332,7 @@ bool checkWin(int r, int c, Color color_inserted) {
         k1--;
         k2--;
     }
+
 
     return false;
 }
