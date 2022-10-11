@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+// Functions
 void init();
 void gameBoard();
 char getChar();
@@ -17,6 +18,7 @@ void playername();
 void flipCoin();
 void askPlayerName();
 bool checkWin();
+bool checkBoardFull();
 
 //time 
 time_t start,end;
