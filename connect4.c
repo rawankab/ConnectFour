@@ -153,10 +153,10 @@ void playerMove(){
                 playerUsername = player2;
             }
         }
+
         start = 0;      // Resets the start time to 0
         end = 0;        // Resets the end time to 0
         
-
         time(&start);                              // This is the start of the timer
 
         while(true){ 
@@ -168,11 +168,11 @@ void playerMove(){
             
 
             if(insertion != -1){
-                time(&end);                         // This is the end of the timer
-                if (player == Red && player1Color == Red || player == Yellow && player1Color == Yellow) {       
+                time(&end);                                   // This is the end of the timer
+                if (player == player1Color) {                // This condition checks if the current player is player 1
                     time1 += (int) difftime(end,start);     // This is the time of the first player
                 } else {
-                    time2 += (int) difftime(end,start);     // This is the time of the second player
+                    time2 += (int) difftime(end,start);   // This is the time of the second player
                 }
                 turn++;
                 int r = insertion;
