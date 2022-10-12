@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-// Functions
 void init();
 void gameBoard();
 char getChar();
@@ -18,7 +17,6 @@ void playername();
 void flipCoin();
 void askPlayerName();
 bool checkWin();
-bool checkBoardFull();
 
 //time 
 time_t start,end;
@@ -155,10 +153,10 @@ void playerMove(){
                 playerUsername = player2;
             }
         }
-
         start = 0;      // Resets the start time to 0
         end = 0;        // Resets the end time to 0
         
+
         time(&start);                              // This is the start of the timer
 
         while(true){ 
@@ -170,11 +168,11 @@ void playerMove(){
             
 
             if(insertion != -1){
-                time(&end);                                   // This is the end of the timer
-                if (player == player1Color) {                // This condition checks if the current player is player 1
+                time(&end);                         // This is the end of the timer
+                if (player == Red && player1Color == Red || player == Yellow && player1Color == Yellow) {       
                     time1 += (int) difftime(end,start);     // This is the time of the first player
                 } else {
-                    time2 += (int) difftime(end,start);   // This is the time of the second player
+                    time2 += (int) difftime(end,start);     // This is the time of the second player
                 }
                 turn++;
                 int r = insertion;
@@ -280,16 +278,16 @@ bool checkWin(int r, int c, Color color_inserted) {
 
     //third case: checking diagonally-left to right
     int i1 = r + 3; int i2 = c - 3; //start checking from these initial coordinates
-    while(i1 > 5)
+    while(i1 > 5 || i2 < 0) {
         i1--;
-    while(i2 < 0)
         i2++;
+    }
 
     int j1 = r - 3; int j2 = c + 3; //checking ends at these coordinates
-    while(j1 < 0)
+    while(j1 < 0 || j2 > 6) {
         j1++;
-    while(j2 > 6)
         j2--;
+    }
     
     int k1 = i1; int k2 = i2;
     int counter3 = 0;
@@ -309,20 +307,21 @@ bool checkWin(int r, int c, Color color_inserted) {
     //fourth case: checking diagonally-right to left
     //Similar concept, except coordinates of where we start and where we finish change a bit
     i1 = r + 3; i2 = c + 3;
-    while(i1 > 5)
+    while(i1 > 5 || i2 > 6) {
         i1--;
-    while(i2 > 6)
         i2--;
+    }
     
     j1 = r - 3; j2 = c - 3;
-    while(j1 < 0)
+    while(j1 < 0 || j2 < 0) {
         j1++;
-    while(j2 < 0)
         j2++;
+    }
     
     k1 = i1; k2 = i2;
     int counter4 = 0;
     while(k1 >= j1 - 1 && k2 >= j2 - 1) {
+        
         if(counter4 == 4) {
             printf("diagonally, right to left\n");
             return true;
