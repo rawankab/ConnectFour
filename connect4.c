@@ -19,7 +19,7 @@ void flipCoin();
 void askPlayerName();
 bool checkWin();
 bool checkBoardFull();
-
+int isDigit();
 //time 
 time_t start,end;
 int time1 = 0;
@@ -161,15 +161,15 @@ void playerMove(){
 
         time(&start);                              // This is the start of the timer
 
-        while(true){ 
+    while(true){ 
 
-            printf("%s enter column #(1-7): \n", playerUsername);  
+            printf("%s enter column #(1-7): \n", playerUsername); 
+             
             scanf("%d", &numberChosen);
+
             int insertion = insert(player, numberChosen);
-
             
-
-            if(insertion != -1){
+             if(insertion != -1){
                 time(&end);                                 // This is the end of the timer
                 if (player == player1Color) {               // This condition checks if the current player is player 1
                     time1 += (int) difftime(end,start);     // This is the time of the first player
@@ -179,13 +179,14 @@ void playerMove(){
                 turn++;
                 int r = insertion;
                 if(checkWin(r, numberChosen-1, player)) {
-                    printf("%s won!\n", playerUsername);
+                    printf("%s WON!\n", playerUsername);
                     isRunning = false;
                 }
                 break;
         }
-            printf("input another valid #(1-7)\n");
+            printf("NOT VALID :(  => # should be in the range (1-7)\n");
         }
+        
 
         gameBoard();
 
@@ -214,7 +215,7 @@ void playerMove(){
 // the row in which the coin is inserted if the insertion was succeseful. It throws an exception if the column chosen is not the range
 // 1 to 7 or full.
 int insert(Color currentPlayer, int col){
-    if(col <= 0 || col > columns){ 
+    if(col <= 0 || col > columns ){ 
         return -1;
     }
 
@@ -226,7 +227,7 @@ int insert(Color currentPlayer, int col){
         }
     }
      if(r == -1){
-    printf("column is full :(  \n");
+    printf("COLUMN IS FULL :(  \n");
         return -1;
     }
 
@@ -339,6 +340,19 @@ bool checkWin(int r, int c, Color color_inserted) {
 
     return false;
 }
+/*int isDigit(double num){
+    char s[20];
+    int flag = 0; 
+    sprintf(s, "%f", num);
+    for(int i = 0; s[i] != 0; i++){
+        if(s[i] == '.'){
+            return -1;
+        }
+        else{
+            return 1;
+        }
+    }
+}*/
 
 int main(){
     askPlayerName();
@@ -347,3 +361,80 @@ int main(){
     playerMove();
     return 0;
 }
+/*
+Test case #1 : 
+Let's consider the case where one of the players enters a # of column between 1-7 denoted  by
+j and the insertion was successiful (that is the column chosen is not full) 
+he will be a winner only if :
+
+1.1- 4 consecutive horizontal connections where formed at any of the rows from(1-6) and from the jth column to the jth+3
+(where j + 3 <= 7). Note that vertically there are 6*4 = 24 possible ones.
+i.e. (Winner on the 2nd row) 
+-----------------------------
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| R | 0 | 0 | Y | Y | 0 | 0 |
+| Y | Y | R | R | R | R | Y |
+| R | Y | R | Y | R | Y | R |
+-----------------------------
+
+1.2- 4 consecutive vertical connections where formed at one of the column (1-7) from the ith row to the ith+3 
+(where i + 3 <= 6). Note that there are 7*3 = 21 possible ones.
+i.e. (Winner on the 5th column)
+-----------------------------
+| R | 0 | 0 | 0 | Y | 0 | 0 |
+| R | R | 0 | 0 | Y | 0 | 0 |
+| Y | Y | 0 | 0 | Y | 0 | 0 |
+| R | R | R | 0 | Y | Y | R |
+| Y | R | Y | R | R | Y | Y |
+| R | Y | Y | R | R | R | Y |
+-----------------------------
+
+1.3- 4 consecutive connections where formed by to a positive diagonal that could only be formed
+between the boxs starting at board[3][1] (and going diagonally upwards) until the 
+board[1][4] (and going diagonally upwards). Note that there are only 3*4 = 12 possible ones
+(since only 3 rows could form a postive diagonal and on each row there are 4 possible cases)
+i.e (Winner starting from the 3rd row and going diagonally positive) 
+-----------------------------                   
+| 0 | 0 | 0 | R | 0 | 0 | 0 |
+| 0 | 0 | R | Y | 0 | 0 | 0 |
+| 0 | R | R | Y | 0 | 0 | 0 |
+| R | Y | R | Y | 0 | 0 | 0 |
+| Y | R | Y | R | 0 | 0 | 0 |
+| R | Y | Y | R | Y | 0 | 0 |
+-----------------------------
+
+1.4- 4 consecutive connections where formed by to a negative diagonal that could only be formed
+between the boxs starting at board[4][1] (and going diagonally downwrds) until the 
+board[6][4] (and going diagonally downwords). Note that there are only 3*4 = 12 possible ones
+(since only 3 rows could form a negative diagonal and on each row there are 4 possible cases)
+i.e (Winner starting from the 4rd row and going diagonally negative) 
+-----------------------------
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | Y | 0 | 0 | 0 | 0 |
+| 0 | 0 | R | Y | 0 | 0 | 0 |
+| 0 | 0 | Y | Y | Y | 0 | R |
+| 0 | 0 | R | R | R | Y | R |
+-----------------------------
+
+Test case #2 :
+
+2.1- if the player enters '0' as an input an exception will be thrown requiring him to enter a column # (1-7).
+i.e 
+User1 enter column #(1-7):
+0
+NOT VALID :(  => # should be in the range (1-7)
+User1 enter column #(1-7):
+
+2.2- if the player enters a non zero negative number as an input an exception will be thrown 
+requiring him to enter a column # (1-7).
+i.e 
+User2 enter column #(1-7):
+-3
+NOT VALID :(  => # should be in the range (1-7)
+User2 enter column #(1-7):
+
+2.3 TO BE CONTINUED... 
+*/
