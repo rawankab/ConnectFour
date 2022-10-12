@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+//functions
 void init();
 void gameBoard();
 char getChar();
@@ -17,6 +18,7 @@ void playername();
 void flipCoin();
 void askPlayerName();
 bool checkWin();
+bool checkBoardFull();
 
 //time 
 time_t start,end;
@@ -168,8 +170,8 @@ void playerMove(){
             
 
             if(insertion != -1){
-                time(&end);                         // This is the end of the timer
-                if (player == Red && player1Color == Red || player == Yellow && player1Color == Yellow) {       
+                time(&end);                                 // This is the end of the timer
+                if (player == player1Color) {               // This condition checks if the current player is player 1
                     time1 += (int) difftime(end,start);     // This is the time of the first player
                 } else {
                     time2 += (int) difftime(end,start);     // This is the time of the second player
@@ -194,11 +196,11 @@ void playerMove(){
         if (checkBoardFull()) {
              printf("The board is full! the winner will be chosen based on speed: \n");
              if (time1 < time2) {
-                 printf("%s wins with t1 = %ds and t2 = %ds\n", player1, time1, time2);
+                 printf("%s wins! (with %s = %ds and %s = %ds)\n", player1, player1, time1, player2, time2);
             } else if (time2 < time1) {
-                 printf("%s wins with t2 = %ds and t1 = %ds\n", player2, time2, time1);
+                 printf("%s wins! (with %s = %ds and %s = %ds)\n", player2, player2, time2, player1, time1);
             } else {
-                 printf("It's a tie! (t1 = %ds) (t2 = %ds) \n", time1, time2);
+                 printf("It's a tie! (with %s = %ds and %s = %ds) \n", player1, time1, player2, time2);
             }
             isRunning = false;
              break;
@@ -345,4 +347,3 @@ int main(){
     playerMove();
     return 0;
 }
-
