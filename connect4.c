@@ -20,6 +20,7 @@ void askPlayerName();
 bool checkWin();
 bool checkBoardFull();
 int isDigit();
+int checkwhitespace();
 //time 
 time_t start,end;
 int time1 = 0;
@@ -101,12 +102,35 @@ void gameBoard(){
 void askPlayerName() {
 
     printf("Welcome to Connect Four! \n");
-
+    while (true) {
     printf("Player 1, Enter your name: ");
-    scanf("%s", &player1);
+    fgets("%s", &player1, stdin);
 
-    printf("Player 2, Enter your name: ");
-    scanf("%s", &player2);
+    if (checkwhitespace(player1) == 0) {
+        printf("Please enter a name with no white spaces");
+        break;
+    }
+}
+
+    while (true) {
+        printf("Player 2, Enter your name: ");
+        fgets("%s", &player2, stdin);
+
+        if (checkwhitespace(player2) == 0) {
+            printf("Please enter a name with no white spaces");
+            break;
+        }
+    }
+}
+
+int checkwhitespace(char *player) {
+    while (*player != '\0') {
+        if (*player == ' ') {
+            return 0;
+        }
+        player++;
+    }
+    return 1;
 }
 
 // flipCoin() does not require any parameters. It assigns randomly which one of the players will play Red. 
