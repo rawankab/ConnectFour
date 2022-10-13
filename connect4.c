@@ -104,24 +104,30 @@ void askPlayerName() {
     printf("Welcome to Connect Four! \n");
     while (true) {
     printf("Player 1, Enter your name: ");
-    fgets("%s", &player1, stdin);
+    fgets(player1, 20, stdin);
 
     if (checkwhitespace(player1) == 0) {
         printf("Please enter a name with no white spaces");
+        }
         break;
-    }
-}
+    } 
+
+
+
 
     while (true) {
         printf("Player 2, Enter your name: ");
-        fgets("%s", &player2, stdin);
+        fgets(player2, 20, stdin);
 
         if (checkwhitespace(player2) == 0) {
             printf("Please enter a name with no white spaces");
-            break;
-        }
+        } 
+        break;
+
     }
 }
+
+
 
 int checkwhitespace(char *player) {
     while (*player != '\0') {
