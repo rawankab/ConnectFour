@@ -19,8 +19,8 @@ void flipCoin();
 void askPlayerName();
 bool checkWin();
 bool checkBoardFull();
-int isDigit();
-int checkwhitespace();
+int checkWhiteSpace();
+
 //time 
 time_t start,end;
 int time1 = 0;
@@ -35,17 +35,18 @@ const int rows = 6;
 const int columns = 7;
 char board[6][7];
 
-// enum Color gives the 3 possible numerical representations of the colors that are going to be used
-// in our 2D array. Since we are going to keep track of the color of the players, 
-// we decided to create 2 variables called "player1Color" and "player2Color". 
+/* enum Color gives the 3 possible numerical representations of the colors that are going to be used
+   in our 2D array. Since we are going to keep track of the color of the players,  
+   we decided to create 2 variables called "player1Color" and "player2Color". */
 typedef enum Color {Empty = 0, Red = 1 , Yellow = 2} Color;
 Color player1Color; 
 Color player2Color;
 
 
-// checkBoartFull() checks if the board is full or not by checking if there is an empty space in the
-// 1st column of the board. If there is an empty space, then the board is not full. If there is no empty
-// space, then the board is full.
+/* checkBoartFull() does not take any parameters. 
+It checks if the board is full or not by checking if there is an empty space in the
+1st column of the board. If there is an empty space, then the board is not full. If there is no empty
+space, then the board is full. */
 bool checkBoardFull(){
     for (int i = 0; i <=columns; i++){
         if (board[0][i] == '0'){
@@ -70,8 +71,8 @@ bool checkBoardFull(){
     }
    
     
-// init() does not require any parameters. It initializes the game Board having
-// seven columns and six rows to empty cells.
+/*init() does not require any parameters. It initializes the game Board having
+seven columns and six rows to empty cells. */
 void init(){
     printf("----------------------------- \n");
     for (int i = 0; i < rows; i++){
@@ -84,8 +85,8 @@ void init(){
     printf("----------------------------- \n");
 }
 
-// gameBoard() does not require any parameters. It prints out the updated game board at each 
-// move the players undertake. 
+/*gameBoard() does not require any parameters. It prints out the updated game board at each 
+move the players undertake. */
 void gameBoard(){
     printf("-----------------------------  \n");
     for(int i = 0; i < rows; i++){
@@ -98,15 +99,18 @@ void gameBoard(){
 
 }
 
-// askPlayerName() does not requires any parameters. It welcomes the players and asks for their names. 
+/*askPlayerName() does not requires any parameters. It welcomes the players and asks for their names each one 
+at a time. However the player are required to input their usernames as a single word with no space. That is, 
+if the player enters his username with a white space the function will throws an exception for him to enter 
+a correct one. */
 void askPlayerName() {
 
     printf("Welcome to Connect Four! \n");
     while (true) {
-    printf("Player 1, Enter your name: ");
+    printf("Player 1, Enter your username as a single word: ");
     fgets(player1, 20, stdin);
 
-    if (checkwhitespace(player1) == 0) {
+    if (checkWhiteSpace(player1) == 0) {
         printf("Please enter a name with no white spaces\n");
         continue;
         }
@@ -117,10 +121,10 @@ void askPlayerName() {
 
 
     while (true) {
-        printf("Player 2, Enter your name: ");
+        printf("Player 2, Enter your username as a single word: ");
         fgets(player2, 20, stdin);
 
-        if (checkwhitespace(player2) == 0) {
+        if (checkWhiteSpace(player2) == 0) {
             printf("Please enter a name with no white spaces\n");
             continue;
         } 
@@ -129,9 +133,9 @@ void askPlayerName() {
     }
 }
 
-
-
-int checkwhitespace(char *player) {
+/*checkWhiteSpace takes as parameter a pointer pointing to the first char of the player's name.
+it return an int : 0 if a white space was found and 1 otherwise. */
+int checkWhiteSpace(char *player) {
     while (*player != '\0') {
         if (*player == ' ') {
             return 0;
@@ -141,10 +145,10 @@ int checkwhitespace(char *player) {
     return 1;
 }
 
-// flipCoin() does not require any parameters. It assigns randomly which one of the players will play Red. 
-// Since Rand returns a random integer it's either going to give us a modulus of 1 or 0, which guarantees 
-// the 50/50 percent chance. If the modulus returns 1 (meaning HEADS) the first player will be given the
-// color RED, and the second player will be YELLOW. In Contrary the Opposite will happen if it's TAILS.
+/*flipCoin() does not require any parameters. It assigns randomly which one of the players will play Red. 
+Since Rand returns a random integer it's either going to give us a modulus of 1 or 0, which guarantees 
+the 50/50 percent chance. If the modulus returns 1 (meaning HEADS) the first player will be given the
+color RED, and the second player will be YELLOW. In Contrary the Opposite will happen if it's TAILS. */
 void flipCoin() {
     srand(time(0));
     if (rand() % 2 != 0) {
@@ -159,10 +163,12 @@ void flipCoin() {
     }
 }
 
-// playerMove() does not requires any parameters and stops when the number of turns exceeds 42 (after that the 
-//board will be full) or when one of the players wins. The main function of the playerMove() 
-// is to determine the current color based on odd/even of the turn. In addition, while the game is still 
-// running playerMove() gets the column number from the user and inserts the 'coin' in the board while printing it.  
+/* playerMove() does not requires any parameters. It stops the game when the number of turns exceeds 42 (after that the 
+board will be full) or when one of the players wins. The main function of the playerMove() 
+is to determine the current color based on odd/even sign of the turn. In addition, while the game is still 
+running playerMove() gets the column number from the user and inserts the 'coin' in the board while printing it 
+and then calls the function checkWin() to check if any of the player has won. If the game terminates with no winner
+it assigns the winner based on the total time taken for each player */
 void playerMove(){
     int turn = 0;
     bool isRunning = true;
@@ -195,7 +201,7 @@ void playerMove(){
 
     while(true){ 
 
-            printf("%s enter column #(1-7): \n", playerUsername); 
+            printf("%s Enter column #(1-7): ", playerUsername); 
              
             scanf("%d", &numberChosen);
 
@@ -222,10 +228,10 @@ void playerMove(){
 
         gameBoard();
 
-        // Checks if the board is full. If it is, then the game will check who took less time to 
-        // complete the game and will declare him/her the winner.
-        // In order to check if it works, input the following sequence
-        // 1 2 1 2 2 1 1 2 2 1 2 1 3 4 3 3 3 3 4 4 4 3 5 4 4 6 5 5 5 5 7 5 7 6 6 7 7 6 6 7 6 7 <-- this causes a tie
+        /*Checks if the board is full. If it is, then the game will check who took less time to 
+        complete the game and will declare him/her the winner.
+        In order to check if it works, input the following sequence
+        1 2 1 2 2 1 1 2 2 1 2 1 3 4 3 3 3 3 4 4 4 3 5 4 4 6 5 5 5 5 7 5 7 6 6 7 7 6 6 7 6 7 <-- this causes a tie. */
         if (checkBoardFull()) {
              printf("The board is full! the winner will be chosen based on speed: \n");
              if (time1 < time2) {
@@ -242,10 +248,10 @@ void playerMove(){
     }
 }
 
-// insert() requires as parameters the enum Color corresponding to the current player and the chossen column 
-// in which he would like to insert his 'coin'. insert() returns an int : -1 if the insertion failed and
-// the row in which the coin is inserted if the insertion was succeseful. It throws an exception if the column chosen is not the range
-// 1 to 7 or full.
+/*insert() requires as parameters the enum Color corresponding to the current player and the chossen column 
+in which the player would like to insert his 'coin'. insert() returns an int : -1 if the insertion failed and
+the row in which the coin is inserted if the insertion was succeseful. It throws an exception if the 
+column chosen is not the range 1 to 7 or if the column chosen is full. */ 
 int insert(Color currentPlayer, int col){
     if(col <= 0 || col > columns ){ 
         return -1;
@@ -267,9 +273,9 @@ int insert(Color currentPlayer, int col){
     return r;
 }
 
-//checkWin() requires as parameters: row and column indexes where the last insertion occurred and the color of the coin inserted
-//checkWin() returns true if last insertion resulted in a win for the player and false otherwise(there are 3 cases for checking:
-//horizontally, vertically, and diagonally(left to right and right to left), thus 4 counters)
+/*checkWin() requires as parameters: row and column indexes where the last insertion occurred and the color of the coin inserted.
+checkWin() returns true if last insertion resulted in a win for the player and false otherwise(there are 3 cases for checking:
+horizontally, vertically, and diagonally(left to right and right to left), thus 4 counters). */
 bool checkWin(int r, int c, Color color_inserted) {
     //first case: checking horizontally
     int i = c - 3;
@@ -372,19 +378,6 @@ bool checkWin(int r, int c, Color color_inserted) {
 
     return false;
 }
-/*int isDigit(double num){
-    char s[20];
-    int flag = 0; 
-    sprintf(s, "%f", num);
-    for(int i = 0; s[i] != 0; i++){
-        if(s[i] == '.'){
-            return -1;
-        }
-        else{
-            return 1;
-        }
-    }
-}*/
 
 int main(){
     askPlayerName();
@@ -394,12 +387,27 @@ int main(){
     return 0;
 }
 /*
-Test case #1 : 
-Let's consider the case where one of the players enters a # of column between 1-7 denoted  by
+Test cases : 
+
+1- if the player1 enters his username as two words (with a white space character) the game requires him to enters 
+an exception is thrown to ask the player to enter his name as a single word. 
+i.e 
+Player 2, Enter your name: Celia L
+Please enter a name with no white spaces
+Player 2, Enter your name: 
+
+2- if the player2 enters his username as two words (with a white space character) the game requires him to enters 
+an exception is thrown to ask the player to enter his name as a single word. 
+i.e 
+Welcome to Connect Four! 
+Player 1, Enter your name: Celia L
+Please enter a name with no white spaces
+
+3- Let's consider the case where one of the players enters a # of column between 1-7 denoted by
 j and the insertion was successiful (that is the column chosen is not full) 
 he will be a winner only if :
 
-1.1- 4 consecutive horizontal connections where formed at any of the rows from(1-6) and from the jth column to the jth+3
+3.1- 4 consecutive horizontal connections where formed at any of the rows (1-6), from the jth column to the jth+3
 (where j + 3 <= 7). Note that vertically there are 6*4 = 24 possible ones.
 i.e. (Winner on the 2nd row) 
 -----------------------------
@@ -411,7 +419,7 @@ i.e. (Winner on the 2nd row)
 | R | Y | R | Y | R | Y | R |
 -----------------------------
 
-1.2- 4 consecutive vertical connections where formed at one of the column (1-7) from the ith row to the ith+3 
+3.2- 4 consecutive vertical connections where formed at one of the column (1-7) from the ith row to the ith+3 
 (where i + 3 <= 6). Note that there are 7*3 = 21 possible ones.
 i.e. (Winner on the 5th column)
 -----------------------------
@@ -423,7 +431,7 @@ i.e. (Winner on the 5th column)
 | R | Y | Y | R | R | R | Y |
 -----------------------------
 
-1.3- 4 consecutive connections where formed by to a positive diagonal that could only be formed
+3.3- 4 consecutive connections where formed by to a positive diagonal that could only be formed
 between the boxs starting at board[3][1] (and going diagonally upwards) until the 
 board[1][4] (and going diagonally upwards). Note that there are only 3*4 = 12 possible ones
 (since only 3 rows could form a postive diagonal and on each row there are 4 possible cases)
@@ -437,11 +445,11 @@ i.e (Winner starting from the 3rd row and going diagonally positive)
 | R | Y | Y | R | Y | 0 | 0 |
 -----------------------------
 
-1.4- 4 consecutive connections where formed by to a negative diagonal that could only be formed
+3.4- 4 consecutive connections where formed by to a negative diagonal that could only be formed
 between the boxs starting at board[4][1] (and going diagonally downwrds) until the 
 board[6][4] (and going diagonally downwords). Note that there are only 3*4 = 12 possible ones
 (since only 3 rows could form a negative diagonal and on each row there are 4 possible cases)
-i.e (Winner starting from the 4rd row and going diagonally negative) 
+i.e (Winner starting from the 4th row and going diagonally downwards) 
 -----------------------------
 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -451,16 +459,23 @@ i.e (Winner starting from the 4rd row and going diagonally negative)
 | 0 | 0 | R | R | R | Y | R |
 -----------------------------
 
-Test case #2 :
+4- if the player enters a column number that that is between 1-7 but the chosen column is full. the player is asked 
+to enter another column number.
+i.e 
+Celia enter column #(1-7): 
+3
+COLUMN IS FULL :(  
+NOT VALID :(  => # should be in the range (1-7)
+Celia enter column #(1-7): 
 
-2.1- if the player enters '0' as an input an exception will be thrown requiring him to enter a column # (1-7).
+5- if the player enters '0' as an input an exception will be thrown requiring him to enter a column # (1-7).
 i.e 
 User1 enter column #(1-7):
 0
 NOT VALID :(  => # should be in the range (1-7)
 User1 enter column #(1-7):
 
-2.2- if the player enters a non zero negative number as an input an exception will be thrown 
+6- if the player enters any non zero negative number as an input an exception will be thrown 
 requiring him to enter a column # (1-7).
 i.e 
 User2 enter column #(1-7):
@@ -468,5 +483,5 @@ User2 enter column #(1-7):
 NOT VALID :(  => # should be in the range (1-7)
 User2 enter column #(1-7):
 
-2.3 TO BE CONTINUED... 
+
 */
