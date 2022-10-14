@@ -156,12 +156,12 @@ void flipCoin() {
     if (rand() % 2 != 0) {
         player1Color = 1;
         player2Color = 2;
-        printf("HEADS ! %s goes first, You are RED \n", player1);
+        printf("HEADS ! The player who goes first as RED is .... %s \n", player1);
     } 
     else {
         player1Color = 2;
         player2Color = 1;
-        printf("TAILS ! %s goes first, You are RED \n", player2);
+        printf("TAILS ! The player who goes first as RED is.... %s \n", player2);
     }
 }
 
@@ -202,7 +202,7 @@ void playerMove(){
         time(&start);                              // This is the start of the timer
 
     while(true){ 
-        printf("%s Enter column #(1-7): ", playerUsername); 
+        printf("Enter column #(1-7), %s ", playerUsername); 
         while(true){
             char input[100];
             fgets(input, 100, stdin);
