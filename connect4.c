@@ -7,6 +7,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <ctype.h>
 
 //functions
 void init();
@@ -37,8 +38,8 @@ const int columns = 7;
 char board[6][7];
 
 /* enum Color gives the 3 possible numerical representations of the colors that are going to be used
-   in our 2D array. Since we are going to keep track of the color of the players,  
-   we decided to create 2 variables called "player1Color" and "player2Color". */
+in our 2D array. Since we are going to keep track of the color of the players,  
+we decided to create 2 variables called "player1Color" and "player2Color". */
 typedef enum Color {Empty = 0, Red = 1 , Yellow = 2} Color;
 Color player1Color; 
 Color player2Color;
@@ -195,44 +196,65 @@ void playerMove(){
             }
         }
         start = 0;      // Resets the start time to 0
-        end = 0;        // Resets the end time to 0
+        end = 0;       // Resets the end time to 0
         
 
         time(&start);                              // This is the start of the timer
 
     while(true){ 
-
-            printf("%s Enter column #(1-7): ", playerUsername); 
-             
-            scanf("%d", &numberChosen);
-
-            int insertion = insert(player, numberChosen);
-            
-             if(insertion != -1){
-                time(&end);                                 // This is the end of the timer
-                if (player == player1Color) {               // This condition checks if the current player is player 1
-                    time1 += (int) difftime(end,start);     // This is the time of the first player
-                } else {
-                    time2 += (int) difftime(end,start);     // This is the time of the second player
+        printf("%s Enter column #(1-7): ", playerUsername); 
+        while(true){
+            char input[100];
+            fgets(input, 100, stdin);
+            //check if first char is an integer 
+            if (!isdigit(input[0])){
+                printf("please enter a number between 1-7 \n");
+                continue;
+            }
+            //check if rest of string is a valid integer
+            bool validNum = true;
+            for(char* c = input + 1; (*c) !='\0' && (*c) != '\n'; c++){
+                if (!isdigit(*c)){
+                    validNum = false;
+                    printf("please enter a number between 1-7 \n");
+                    break;
                 }
-                turn++;
-                int r = insertion;
-                if(checkWin(r, numberChosen-1, player)) {
-                    printf("%s WON!\n", playerUsername);
-                    isRunning = false;
+            }
+            if (validNum) {
+                numberChosen = atoi(input);
+                if (numberChosen < 1 || numberChosen > 7) 
+                    printf("please enter a number between 1-7 \n");
+                else {
+                    break;
                 }
-                break;
-        }
-            printf("NOT VALID :(  => # should be in the range (1-7)\n");
+            }
         }
         
+        int insertion = insert(player, numberChosen);
+            
+        if(insertion != -1){
+            time(&end);                                 // This is the end of the timer
+            if (player == player1Color) {               // This condition checks if the current player is player 1
+                time1 += (int) difftime(end,start);     // This is the time of the first player
+            } else {
+                time2 += (int) difftime(end,start);     // This is the time of the second player
+            }
+            turn++;
+            int r = insertion;
+            if(checkWin(r, numberChosen-1, player)) {
+                printf("%s WON!\n", playerUsername);
+                isRunning = false;
+            }
+            break;
+        }
+    }
+    
+    gameBoard();
 
-        gameBoard();
-
-        /*Checks if the board is full. If it is, then the game will check who took less time to 
-        complete the game and will declare him/her the winner.
-        In order to check if it works, input the following sequence
-        1 2 1 2 2 1 1 2 2 1 2 1 3 4 3 3 3 3 4 4 4 3 5 4 4 6 5 5 5 5 7 5 7 6 6 7 7 6 6 7 6 7 <-- this causes a tie. */
+    /*Checks if the board is full. If it is, then the game will check who took less time to 
+    complete the game and will declare him/her the winner.
+    In order to check if it works, input the following sequence
+    1 2 1 2 2 1 1 2 2 1 2 1 3 4 3 3 3 3 4 4 4 3 5 4 4 6 5 5 5 5 7 5 7 6 6 7 7 6 6 7 6 7 <-- this causes a tie. */
         if (checkBoardFull()) {
              printf("The board is full! the winner will be chosen based on speed: \n");
              if (time1 < time2) {
@@ -245,7 +267,6 @@ void playerMove(){
             isRunning = false;
              break;
         }
-
     }
 }
 
@@ -254,10 +275,6 @@ in which the player would like to insert his 'coin'. insert() returns an int : -
 the row in which the coin is inserted if the insertion was succeseful. It throws an exception if the 
 column chosen is not the range 1 to 7 or if the column chosen is full. */ 
 int insert(Color currentPlayer, int col){
-    if(col <= 0 || col > columns ){ 
-        return -1;
-    }
-
     int r;
     for( r = rows -1; r >= 0; r--){
         if(board[r][col] == '0'){
@@ -409,11 +426,11 @@ a new name . The exception if thrown "Please enter a different name with no whit
 Player 2 , enter your name : Celia (where Celia is also the first players name)
 output : Please enter a different name with no white spaces
 
-3- Let's consider the case where one of the players enters a # of column between 1-7 denoted by
+4- Let's consider the case where one of the players enters a # of column between 1-7 denoted by
 j and the insertion was successiful (that is the column chosen is not full) 
 he will be a winner only if :
 
-3.1- 4 consecutive horizontal connections where formed at any of the rows (1-6), from the jth column to the jth+3
+4.1- 4 consecutive horizontal connections where formed at any of the rows (1-6), from the jth column to the jth+3
 (where j + 3 <= 7). Note that vertically there are 6*4 = 24 possible ones.
 i.e. (Winner on the 2nd row) 
 -----------------------------
@@ -425,7 +442,7 @@ i.e. (Winner on the 2nd row)
 | R | Y | R | Y | R | Y | R |
 -----------------------------
 
-3.2- 4 consecutive vertical connections where formed at one of the column (1-7) from the ith row to the ith+3 
+4.2- 4 consecutive vertical connections where formed at one of the column (1-7) from the ith row to the ith+3 
 (where i + 3 <= 6). Note that there are 7*3 = 21 possible ones.
 i.e. (Winner on the 5th column)
 -----------------------------
@@ -437,7 +454,7 @@ i.e. (Winner on the 5th column)
 | R | Y | Y | R | R | R | Y |
 -----------------------------
 
-3.3- 4 consecutive connections where formed by to a positive diagonal that could only be formed
+4.3- 4 consecutive connections where formed by to a positive diagonal that could only be formed
 between the boxs starting at board[3][1] (and going diagonally upwards) until the 
 board[1][4] (and going diagonally upwards). Note that there are only 3*4 = 12 possible ones
 (since only 3 rows could form a postive diagonal and on each row there are 4 possible cases)
@@ -451,7 +468,7 @@ i.e (Winner starting from the 3rd row and going diagonally positive)
 | R | Y | Y | R | Y | 0 | 0 |
 -----------------------------
 
-3.4- 4 consecutive connections where formed by to a negative diagonal that could only be formed
+4.4- 4 consecutive connections where formed by to a negative diagonal that could only be formed
 between the boxs starting at board[4][1] (and going diagonally downwrds) until the 
 board[6][4] (and going diagonally downwords). Note that there are only 3*4 = 12 possible ones
 (since only 3 rows could form a negative diagonal and on each row there are 4 possible cases)
@@ -465,29 +482,47 @@ i.e (Winner starting from the 4th row and going diagonally downwards)
 | 0 | 0 | R | R | R | Y | R |
 -----------------------------
 
-4- if the player enters a column number that that is between 1-7 but the chosen column is full. the player is asked 
+5- if the player enters a column number that that is between 1-7 but the chosen column is full. the player is asked 
 to enter another column number.
 i.e 
-Celia enter column #(1-7): 
-3
-COLUMN IS FULL :(  
-NOT VALID :(  => # should be in the range (1-7)
-Celia enter column #(1-7): 
-
-5- if the player enters '0' as an input an exception will be thrown requiring him to enter a column # (1-7).
+-----------------------------
+| 0 | Y | 0 | 0 | 0 | 0 | 0 |
+| 0 | R | 0 | 0 | 0 | 0 | 0 |
+| 0 | Y | 0 | 0 | 0 | 0 | 0 |
+| 0 | R | 0 | 0 | 0 | 0 | 0 |
+| Y | R | Y | 0 | 0 | 0 | 0 |
+| R | Y | Y | R | R | 0 | 0 |
+-----------------------------
+Celia enter column #(1-7):
+2
+COLUMN IS FULL :(
+Celia enter column #(1-7):
+ 
+6- if the player enters '0' as an input an exception will be thrown requiring him to enter a column number (1-7).
 i.e 
-User1 enter column #(1-7):
+Celia enter column #(1-7):
 0
-NOT VALID :(  => # should be in the range (1-7)
-User1 enter column #(1-7):
+please enter a number between 1-7
 
-6- if the player enters any non zero negative number as an input an exception will be thrown 
-requiring him to enter a column # (1-7).
+7- if the player enters any non zero negative number as an input an exception will be thrown 
+requiring him to enter a column number (1-7).
 i.e 
-User2 enter column #(1-7):
--3
-NOT VALID :(  => # should be in the range (1-7)
-User2 enter column #(1-7):
+Celia enter column #(1-7):
+-9
+please enter a number between 1-7
 
+8- if the player enters any character as an input an exception will be thrown 
+requiring him to enter a column number (1-7).
+i.e
+Celia enter column #(1-7):
+t
+please enter a number between 1-7
+
+9- if the player enters any string as an input an exception will be thrown 
+requiring him to enter a column number (1-7).
+i.e
+Celia enter column #(1-7):
+celiaaa
+please enter a number between 1-7
 
 */
