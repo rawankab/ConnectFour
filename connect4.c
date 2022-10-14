@@ -107,7 +107,8 @@ void askPlayerName() {
     fgets(player1, 20, stdin);
 
     if (checkwhitespace(player1) == 0) {
-        printf("Please enter a name with no white spaces");
+        printf("Please enter a name with no white spaces\n");
+        continue;
         }
         break;
     } 
@@ -120,7 +121,8 @@ void askPlayerName() {
         fgets(player2, 20, stdin);
 
         if (checkwhitespace(player2) == 0) {
-            printf("Please enter a name with no white spaces");
+            printf("Please enter a name with no white spaces\n");
+            continue;
         } 
         break;
 
