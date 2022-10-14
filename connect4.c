@@ -168,8 +168,10 @@ void flipCoin() {
 /* playerMove() does not requires any parameters. It stops the game when the number of turns exceeds 42 (after that the 
 board will be full) or when one of the players wins. The main function of the playerMove() 
 is to determine the current color based on odd/even sign of the turn. In addition, while the game is still 
-running playerMove() gets the column number from the user and inserts the 'coin' in the board while printing it 
-and then calls the function checkWin() to check if any of the player has won. If the game terminates with no winner
+running playerMove() gets the column number from the user. Yet, before inserting the program checks for several test cases
+such as if the input entered by the user is a character or string or a floating point : if it's any of these,
+the program will throw an excpetion asking him to enter a right input again. Afterwards (after having the right input), it
+inserts the 'coin' in the board while printing it and then calls the function checkWin() to check if any of the player has won. If the game terminates with no winner
 it assigns the winner based on the total time taken for each player */
 void playerMove(){
     int turn = 0;
