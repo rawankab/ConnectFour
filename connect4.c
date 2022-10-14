@@ -20,6 +20,7 @@ void askPlayerName();
 bool checkWin();
 bool checkBoardFull();
 int checkWhiteSpace();
+int strcmp();
 
 //time 
 time_t start,end;
@@ -124,8 +125,8 @@ void askPlayerName() {
         printf("Player 2, Enter your username as a single word: ");
         fgets(player2, 20, stdin);
 
-        if (checkWhiteSpace(player2) == 0) {
-            printf("Please enter a name with no white spaces\n");
+        if (checkWhiteSpace(player2) == 0 || strcmp(str1, str2) == 0) {
+            printf("Please enter a different name with no white spaces\n");
             continue;
         } 
         break;
@@ -402,6 +403,11 @@ i.e
 Welcome to Connect Four! 
 Player 1, Enter your name: Celia L
 Please enter a name with no white spaces
+
+3- If the second user enters a name that's identical to the first player names , the game requires him/her to enter
+a new name . The exception if thrown "Please enter a different name with no white spaces"
+Player 2 , enter your name : Celia (where Celia is also the first players name)
+output : Please enter a different name with no white spaces
 
 3- Let's consider the case where one of the players enters a # of column between 1-7 denoted by
 j and the insertion was successiful (that is the column chosen is not full) 
