@@ -125,7 +125,7 @@ void askPlayerName() {
         printf("Player 2, Enter your username as a single word: ");
         fgets(player2, 20, stdin);
 
-        if (checkWhiteSpace(player2) == 0 || strcmp(str1, str2) == 0) {
+        if (checkWhiteSpace(player2) == 0 || strcmp(player1, player2) == 0) {
             printf("Please enter a different name with no white spaces\n");
             continue;
         } 
