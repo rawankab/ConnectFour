@@ -468,7 +468,7 @@ i.e. (Winner on the 5th column)
 | R | Y | Y | R | R | R | Y |
 -----------------------------
 
-4.3- 4 consecutive connections where formed by to a positive diagonal that could only be formed
+1.3- 4 consecutive connections where formed by to a positive diagonal that could only be formed
 between the boxs starting at board[3][1] (and going diagonally upwards) until the 
 board[1][4] (and going diagonally upwards). Note that there are only 3*4 = 12 possible ones
 (since only 3 rows could form a postive diagonal and on each row there are 4 possible cases)
