@@ -436,3 +436,86 @@ int main() {
     currentplayermove();
     return 0;
 }
+
+/*
+Test cases : 
+
+Let's consider the case where one of the players enters a # of column between 1-7 denoted by
+j and the insertion was successiful (that is the column chosen is not full) 
+he will be a winner only if :
+
+1.1- 4 consecutive horizontal connections where formed at any of the rows (1-6), from the jth column to the jth+3
+(where j + 3 <= 7). Note that vertically there are 6*4 = 24 possible ones.
+i.e. (Winner on the 2nd row) 
+-----------------------------
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| R | 0 | 0 | Y | Y | 0 | 0 |
+| Y | Y | R | R | R | R | Y |
+| R | Y | R | Y | R | Y | R |
+-----------------------------
+
+1.2- 4 consecutive vertical connections where formed at one of the column (1-7) from the ith row to the ith+3 
+(where i + 3 <= 6). Note that there are 7*3 = 21 possible ones.
+i.e. (Winner on the 5th column)
+-----------------------------
+| R | 0 | 0 | 0 | Y | 0 | 0 |
+| R | R | 0 | 0 | Y | 0 | 0 |
+| Y | Y | 0 | 0 | Y | 0 | 0 |
+| R | R | R | 0 | Y | Y | R |
+| Y | R | Y | R | R | Y | Y |
+| R | Y | Y | R | R | R | Y |
+-----------------------------
+
+4.3- 4 consecutive connections where formed by to a positive diagonal that could only be formed
+between the boxs starting at board[3][1] (and going diagonally upwards) until the 
+board[1][4] (and going diagonally upwards). Note that there are only 3*4 = 12 possible ones
+(since only 3 rows could form a postive diagonal and on each row there are 4 possible cases)
+i.e (Winner starting from the 3rd row and going diagonally positive) 
+-----------------------------                   
+| 0 | 0 | 0 | R | 0 | 0 | 0 |
+| 0 | 0 | R | Y | 0 | 0 | 0 |
+| 0 | R | R | Y | 0 | 0 | 0 |
+| R | Y | R | Y | 0 | 0 | 0 |
+| Y | R | Y | R | 0 | 0 | 0 |
+| R | Y | Y | R | Y | 0 | 0 |
+-----------------------------
+
+1.4- 4 consecutive connections where formed by to a negative diagonal that could only be formed
+between the boxs starting at board[4][1] (and going diagonally downwrds) until the 
+board[6][4] (and going diagonally downwords). Note that there are only 3*4 = 12 possible ones
+(since only 3 rows could form a negative diagonal and on each row there are 4 possible cases)
+i.e (Winner starting from the 4th row and going diagonally downwards) 
+-----------------------------
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | Y | 0 | 0 | 0 | 0 |
+| 0 | 0 | R | Y | 0 | 0 | 0 |
+| 0 | 0 | Y | Y | Y | 0 | R |
+| 0 | 0 | R | R | R | Y | R |
+-----------------------------
+
+2- if the player enters a column number that that is between 1-7 but the chosen column is full. the player is asked 
+to enter another column number.
+i.e 
+-----------------------------
+| 0 | Y | 0 | 0 | 0 | 0 | 0 |
+| 0 | R | 0 | 0 | 0 | 0 | 0 |
+| 0 | Y | 0 | 0 | 0 | 0 | 0 |
+| 0 | R | 0 | 0 | 0 | 0 | 0 |
+| Y | R | Y | 0 | 0 | 0 | 0 |
+| R | Y | Y | R | R | 0 | 0 |
+-----------------------------
+Celia enter column #(1-7):
+2
+Column is full please enter another element:
+
+3- if the player enters '0' or any other input other than #1-7 as an input an exception will be thrown requiring him to enter a column number (1-7).
+i.e 
+Celia enter column #(1-7):
+0
+Invalid input, please enter a number between 1 & 7:
+
+
+*
