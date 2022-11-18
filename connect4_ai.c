@@ -518,4 +518,4 @@ Celia enter column #(1-7):
 Invalid input, please enter a number between 1 & 7:
 
 
-*
+*/
